@@ -90,17 +90,49 @@ Sub GetFileAttribute(ByRef FileSystemObject As Object, ByRef FilePath As String)
  Next
 End Sub
 
-
-
-
  '引数   FilePath           対象ファイルが存在するディレクトリパス。
- '処理概要 指定されたテキストファイルから１行ずつ読み込む処理をする。       
+ '処理概要 指定されたテキストファイルから１行ずつ読み込む処理をする。
 
 Sub ReadTextFile(ByRef FilePath As String)
     Dim Buf As String
     Open FilePath For Input As #1
         Do Until EOF(1)
-            Line Input #1, buf
+            Line Input #1, Buf
+            IsWord (Buf)
         Loop
     Close #1
 End Sub
+
+ '引数
+ '処理概要 設定したパラメータ数に応じて、指定行列値を読み込みワード配列を作成する。
+ 
+Sub MakeWordList()
+  '変数宣言
+  Dim NumberOfParameters As Integer
+  Dim Count As Integer
+  Dim Word As Variant
+  
+  'WordLstに設定するパラメータ数を決める。
+  NumberOfParameters = InputBox("パラメータ数を決定してください。")
+  
+  ReDim Preserve WordList(NumberOfParameters)
+  ThisWorkbook.Activate
+  For Count = 0 To NumberOfParameters - 1
+    WordList(Count) = ThisWorkbook.Sheets(1).Cells(Count + 1, 1)
+  Next Count
+End Sub
+
+ '引数   Text    テキストファイルから読み込んだ1行分の文字列
+ '処理概要  テキストファイルから読み込んだ文字列に、MakeWordListのワードが含まれているか判定する。
+ '使い方    ①呼び出し元でPublic WordList() As Stringを宣言する。
+
+Sub IsWord(ByRef Text As String)
+ Dim Word As Variant
+ For Each Word In WordList
+ If InStr(Text, Word) >= 1 And Word <> "" Then
+  Debug.Print Text
+  Debug.Print Len(Text)
+ End If
+ Next Word
+End Sub
+
