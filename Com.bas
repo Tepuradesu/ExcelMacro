@@ -136,3 +136,24 @@ Sub IsWord(ByRef Text As String)
  Next Word
 End Sub
 
+'テキストファイル出力
+Public Sub TextOutput()
+Dim Count As Integer
+Count = 1
+ 
+'ファイルを書き込みで開く(無ければ新規作成される、あれば上書き)
+Open "C:\Users\Kojirou\Desktop\test.ttl" For Output As #1
+ 
+'開いたファイルに書き込む
+For Count = 1 To 98
+ Print #1, Cells(Count, 1).Value
+Next Count
+ 
+'開いたファイルを閉じる
+Close #1
+ 
+'終わったのが分かるようにメッセージを出す
+MsgBox "完了！"
+ 
+End Sub
+
